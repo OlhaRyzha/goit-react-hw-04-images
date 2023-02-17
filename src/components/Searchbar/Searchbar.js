@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
 import {
   SearchbarHeader,
@@ -8,50 +8,40 @@ import {
   SearchForm,
 } from './Searchbar.styled';
 
-export class Searchbar extends Component {
-  state = {
-    name: '',
-  };
+export function Searchbar({ onFormSubmit }) {
+  const [name, setName] = useState('');
 
-  handleInputChange = event => {
+  const handleInputChange = event => {
     const inputValue = event.target.value;
-    const inputName = event.target.name;
-
-    this.setState({
-      [inputName]: inputValue,
-    });
+    setName(inputValue);
   };
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.props.onFormSubmit(this.state.name);
-    this.reset();
+    onFormSubmit(name);
+    reset();
   };
 
-  reset() {
-    this.setState({
-      name: '',
-    });
+  function reset() {
+    setName('');
   }
 
-  render() {
-    return (
-      <SearchbarHeader>
-        <SearchForm onSubmit={this.handleSubmit}>
-          <SearchFormButton type="submit">
-            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
-          </SearchFormButton>
+  return (
+    <SearchbarHeader>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchFormButton type="submit">
+          <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+        </SearchFormButton>
 
-          <SearchFormButtonInput
-            type="text"
-            name="name"
-            value={this.state.name}
-            autocomplete="off"
-            autoFocus
-            onChange={this.handleInputChange}
-            placeholder="Search images and photos"
-          />
-        </SearchForm>
-      </SearchbarHeader>
-    );
-  }
+        <SearchFormButtonInput
+          type="text"
+          name="name"
+          value={name}
+          autocomplete="off"
+          autoFocus
+          onChange={handleInputChange}
+          placeholder="Search images and photos"
+        />
+      </SearchForm>
+    </SearchbarHeader>
+  );
 }

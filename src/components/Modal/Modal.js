@@ -7,12 +7,12 @@ const modalRoot = document.querySelector('#modal-root');
 export class Modal extends Component {
   onImgKeyDown = e => {
     if (e.key === 'Escape') {
-      this.props.onClose();
+      this.props.onClick();
     }
   };
   onOverlayClick = e => {
     if (e.target.classList.contains('overlay')) {
-      this.props.onClose();
+      this.props.onClick();
     }
   };
 
