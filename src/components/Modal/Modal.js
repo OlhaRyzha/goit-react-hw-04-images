@@ -1,36 +1,32 @@
 import { Overlay, ModalEl } from './Modal.styled';
-import { Component } from 'react';
 import { createPortal } from 'react-dom';
-
+import { useEffect } from 'react';
 const modalRoot = document.querySelector('#modal-root');
 
-export class Modal extends Component {
-  onImgKeyDown = e => {
+export function Modal({ onClick, children }) {
+  const onImgKeyDown = e => {
     if (e.key === 'Escape') {
-      this.props.onClick();
+      onClick();
     }
   };
-  onOverlayClick = e => {
+  const onOverlayClick = e => {
     if (e.target.classList.contains('overlay')) {
-      this.props.onClick();
+      onClick();
     }
   };
+  useEffect(() => {
+    window.addEventListener('keydown', onImgKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onImgKeyDown);
+    };
+  }, []);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onImgKeyDown);
-  }
-  componentDidMount() {
-    window.addEventListener('keydown', this.onImgKeyDown);
-  }
-  render() {
-    const { children } = this.props;
-    return createPortal(
-      <>
-        <Overlay onClick={this.onOverlayClick} className="overlay">
-          <ModalEl>{children}</ModalEl>
-        </Overlay>
-      </>,
-      modalRoot
-    );
-  }
+  return createPortal(
+    <>
+      <Overlay onClick={onOverlayClick} className="overlay">
+        <ModalEl>{children}</ModalEl>
+      </Overlay>
+    </>,
+    modalRoot
+  );
 }
