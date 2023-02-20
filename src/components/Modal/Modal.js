@@ -4,22 +4,22 @@ import { useEffect } from 'react';
 const modalRoot = document.querySelector('#modal-root');
 
 export function Modal({ onClick, children }) {
-  const onImgKeyDown = e => {
-    if (e.key === 'Escape') {
-      onClick();
-    }
-  };
   const onOverlayClick = e => {
     if (e.target.classList.contains('overlay')) {
       onClick();
     }
   };
   useEffect(() => {
+    const onImgKeyDown = e => {
+      if (e.key === 'Escape') {
+        onClick();
+      }
+    };
     window.addEventListener('keydown', onImgKeyDown);
     return () => {
       window.removeEventListener('keydown', onImgKeyDown);
     };
-  }, []);
+  }, [onClick]);
 
   return createPortal(
     <>
